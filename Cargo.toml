@@ -1,8 +1,20 @@
 [package]
 name = "termail"
 version = "0.1.0"
+authors = ["tramhao <haoxinkui@gmail.com>"]
 edition = "2018"
+license = "MIT"
+description = "Terminal Mail client written in Rust. WIP"
+repository = "https://github.com/tramhao/termail"
+homepage = "https://github.com/tramhao/termail"
+keywords = ["terminal", "tui","mail","client","email"]
+categories = ["command-line-interface","command-line-utilities", ]
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "termail"
+path = "src/main.rs"
 
 [dependencies]
