@@ -28,16 +28,10 @@
 mod update;
 mod view;
 use super::{Activity, Context, ExitReason};
-use crate::config::{Termusic, MUSIC_DIR};
+use crate::config::TermailConfig;
 use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
 use log::error;
-use std::collections::VecDeque;
-use std::path::{Path, PathBuf};
-use std::sync::mpsc::{self, Receiver, Sender};
-use std::thread::sleep;
-use std::time::Duration;
-use tui_realm_treeview::Tree;
-use tuirealm::{Payload, Value, View};
+use tuirealm::View;
 
 // -- components
 const COMPONENT_LABEL_HELP: &str = "LABEL_HELP";
@@ -60,16 +54,16 @@ const COMPONENT_INPUT_SEARCH_LIBRARY: &str = "SEARCH_LIBRARY_INPUT";
 /// ## `MainActivity`
 ///
 /// Main activity states holder
-pub struct TermusicActivity {
+pub struct TermailActivity {
     exit_reason: Option<ExitReason>,
     context: Option<Context>, // Context holder
     view: View,               // View
     redraw: bool,
-    config: Termusic,
+    config: TermailConfig,
 }
-impl Default for TermusicActivity {
+impl Default for TermailActivity {
     fn default() -> Self {
-        let config = Termusic::default();
+        let config = TermailConfig::default();
         Self {
             exit_reason: None,
             context: None,
@@ -80,14 +74,14 @@ impl Default for TermusicActivity {
     }
 }
 
-impl TermusicActivity {
-    pub fn init_config(&mut self, config: &Termusic) {
+impl TermailActivity {
+    pub fn init_config(&mut self, config: &TermailConfig) {
         self.config = config.clone();
     }
     pub fn run(&mut self) {}
 }
 
-impl Activity for TermusicActivity {
+impl Activity for TermailActivity {
     /// ### `on_create`
     ///
     /// `on_create` is the function which must be called to initialize the activity.

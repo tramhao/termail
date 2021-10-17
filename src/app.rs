@@ -22,22 +22,22 @@
  * SOFTWARE.
  */
 use super::ui::{
-    activity::{main::TermusicActivity, Activity, ExitReason},
+    activity::{main::TermailActivity, Activity, ExitReason},
     context::Context,
 };
-use crate::config::Termusic;
+use crate::config::TermailConfig;
 use log::error;
 use std::thread::sleep;
 use std::time::Duration;
 // use std::time::Instant;
 
 pub struct App {
-    config: Termusic,
+    config: TermailConfig,
     context: Option<Context>,
 }
 
 impl App {
-    pub fn new(config: Termusic) -> Self {
+    pub fn new(config: TermailConfig) -> Self {
         let mut ctx: Context = Context::new();
         // Enter alternate screen
         ctx.enter_alternate_screen();
@@ -51,7 +51,7 @@ impl App {
     }
 
     pub fn run(&mut self) {
-        let mut main_activity: TermusicActivity = TermusicActivity::default();
+        let mut main_activity: TermailActivity = TermailActivity::default();
         // Get context
         let ctx: Context = if let Some(ctx) = self.context.take() {
             ctx

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 use super::{
-    ExitReason, TermusicActivity, COMPONENT_CONFIRMATION_INPUT, COMPONENT_CONFIRMATION_RADIO,
+    ExitReason, TermailActivity, COMPONENT_CONFIRMATION_INPUT, COMPONENT_CONFIRMATION_RADIO,
     COMPONENT_INPUT_SEARCH_LIBRARY, COMPONENT_INPUT_URL, COMPONENT_LABEL_HELP,
     COMPONENT_PARAGRAPH_LYRIC, COMPONENT_PROGRESS, COMPONENT_TABLE_PLAYLIST,
     COMPONENT_TABLE_SEARCH_LIBRARY, COMPONENT_TABLE_YOUTUBE, COMPONENT_TEXT_ERROR,
@@ -41,7 +41,6 @@ use crate::ui::keymap::{
     MSG_KEY_TAB,
 };
 use humantime::format_duration;
-use if_chain::if_chain;
 use std::path::{Path, PathBuf};
 use std::thread::{self, sleep};
 use std::time::Duration;
@@ -54,7 +53,7 @@ use tuirealm::{
     Msg, Payload, PropsBuilder, Value,
 };
 
-impl TermusicActivity {
+impl TermailActivity {
     /// ### update
     ///
     /// Update auth activity model based on msg

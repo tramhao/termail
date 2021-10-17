@@ -31,13 +31,13 @@ mod ui;
 mod utils;
 
 use app::App;
-use config::Termusic;
+use config::TermailConfig;
 use std::path::Path;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 fn main() {
-    let mut config = Termusic::default();
+    let mut config = TermailConfig::default();
     config.load().unwrap_or_default();
 
     let mut args: Vec<String> = std::env::args().collect();

@@ -23,7 +23,7 @@
  */
 // Locals
 use super::{
-    TermusicActivity, COMPONENT_CONFIRMATION_INPUT, COMPONENT_CONFIRMATION_RADIO,
+    TermailActivity, COMPONENT_CONFIRMATION_INPUT, COMPONENT_CONFIRMATION_RADIO,
     COMPONENT_INPUT_SEARCH_LIBRARY, COMPONENT_INPUT_URL, COMPONENT_LABEL_HELP,
     COMPONENT_PARAGRAPH_LYRIC, COMPONENT_PROGRESS, COMPONENT_TABLE_PLAYLIST,
     COMPONENT_TABLE_SEARCH_LIBRARY, COMPONENT_TABLE_YOUTUBE, COMPONENT_TEXT_ERROR,
@@ -51,7 +51,7 @@ use tuirealm::{
 // tui
 use tui_realm_treeview::{TreeView, TreeViewPropsBuilder};
 
-impl TermusicActivity {
+impl TermailActivity {
     // -- view
 
     /// ### `init_setup`
