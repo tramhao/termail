@@ -62,16 +62,7 @@ impl App {
         // Create activity
         main_activity.init_config(&self.config);
         main_activity.on_create(ctx);
-        let mut progress_interval = 0;
         loop {
-            if progress_interval == 0 {
-                main_activity.run();
-            }
-            progress_interval += 1;
-            if progress_interval >= 8 {
-                progress_interval = 0;
-            }
-
             // Draw activity
             main_activity.on_draw();
             // Check if activity has terminated

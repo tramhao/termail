@@ -21,36 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-use super::{
-    ExitReason, TermailActivity, COMPONENT_CONFIRMATION_INPUT, COMPONENT_CONFIRMATION_RADIO,
-    COMPONENT_INPUT_SEARCH_LIBRARY, COMPONENT_INPUT_URL, COMPONENT_LABEL_HELP,
-    COMPONENT_PARAGRAPH_LYRIC, COMPONENT_PROGRESS, COMPONENT_TABLE_PLAYLIST,
-    COMPONENT_TABLE_SEARCH_LIBRARY, COMPONENT_TABLE_YOUTUBE, COMPONENT_TEXT_ERROR,
-    COMPONENT_TEXT_HELP, COMPONENT_TREEVIEW_LIBRARY,
-};
-use crate::ui::activity::Loop;
-use crate::ui::keymap::MSG_KEY_CHAR_K;
+use super::{ExitReason, TermailActivity, COMPONENT_TEXT_ERROR, COMPONENT_TEXT_HELP};
 use crate::ui::keymap::{
-    MSG_KEY_BACKSPACE, MSG_KEY_CHAR_B, MSG_KEY_CHAR_CAPITAL_B, MSG_KEY_CHAR_CAPITAL_D,
-    MSG_KEY_CHAR_CAPITAL_F, MSG_KEY_CHAR_CAPITAL_G, MSG_KEY_CHAR_CAPITAL_L, MSG_KEY_CHAR_CAPITAL_N,
-    MSG_KEY_CHAR_CAPITAL_Q, MSG_KEY_CHAR_CAPITAL_T, MSG_KEY_CHAR_D, MSG_KEY_CHAR_DASH,
-    MSG_KEY_CHAR_EQUAL, MSG_KEY_CHAR_F, MSG_KEY_CHAR_G, MSG_KEY_CHAR_H, MSG_KEY_CHAR_J,
-    MSG_KEY_CHAR_L, MSG_KEY_CHAR_M, MSG_KEY_CHAR_MINUS, MSG_KEY_CHAR_N, MSG_KEY_CHAR_P,
-    MSG_KEY_CHAR_PLUS, MSG_KEY_CHAR_R, MSG_KEY_CHAR_S, MSG_KEY_CHAR_T, MSG_KEY_CHAR_Y,
-    MSG_KEY_CTRL_H, MSG_KEY_ENTER, MSG_KEY_ESC, MSG_KEY_SHIFT_TAB, MSG_KEY_SLASH, MSG_KEY_SPACE,
-    MSG_KEY_TAB,
+    MSG_KEY_CHAR_CAPITAL_Q, MSG_KEY_CHAR_J, MSG_KEY_CHAR_K, MSG_KEY_CTRL_H, MSG_KEY_ENTER,
+    MSG_KEY_ESC,
 };
-use humantime::format_duration;
-use std::path::{Path, PathBuf};
-use std::thread::{self, sleep};
-use std::time::Duration;
-use tui_realm_stdlib::{LabelPropsBuilder, ParagraphPropsBuilder, ProgressBarPropsBuilder};
-use tui_realm_treeview::TreeViewPropsBuilder;
-use tuirealm::props::Alignment;
 use tuirealm::{
     event::{Event, KeyCode, KeyEvent, KeyModifiers},
-    props::TextSpan,
-    Msg, Payload, PropsBuilder, Value,
+    Msg,
 };
 
 impl TermailActivity {

@@ -38,24 +38,24 @@ pub const MSG_KEY_ESC: Msg = Msg::OnKey(KeyEvent {
     code: KeyCode::Esc,
     modifiers: KeyModifiers::NONE,
 });
-pub const MSG_KEY_TAB: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Tab,
-    modifiers: KeyModifiers::NONE,
-});
+// pub const MSG_KEY_TAB: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Tab,
+//     modifiers: KeyModifiers::NONE,
+// });
 
-pub const MSG_KEY_SHIFT_TAB: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::BackTab,
-    modifiers: KeyModifiers::SHIFT,
-});
+// pub const MSG_KEY_SHIFT_TAB: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::BackTab,
+//     modifiers: KeyModifiers::SHIFT,
+// });
 
 // pub const MSG_KEY_DEL: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Delete,
 //     modifiers: KeyModifiers::NONE,
 // });
-pub const MSG_KEY_BACKSPACE: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Backspace,
-    modifiers: KeyModifiers::NONE,
-});
+// pub const MSG_KEY_BACKSPACE: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Backspace,
+//     modifiers: KeyModifiers::NONE,
+// });
 // pub const MSG_KEY_DOWN: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Down,
 //     modifiers: KeyModifiers::NONE,
@@ -72,10 +72,10 @@ pub const MSG_KEY_BACKSPACE: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Up,
 //     modifiers: KeyModifiers::NONE,
 // });
-pub const MSG_KEY_SPACE: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char(' '),
-    modifiers: KeyModifiers::NONE,
-});
+// pub const MSG_KEY_SPACE: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char(' '),
+//     modifiers: KeyModifiers::NONE,
+// });
 
 // // -- char keys
 
@@ -83,14 +83,14 @@ pub const MSG_KEY_SPACE: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Char('a'),
 //     modifiers: KeyModifiers::NONE,
 // });
-pub const MSG_KEY_CHAR_B: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('b'),
-    modifiers: KeyModifiers::NONE,
-});
-pub const MSG_KEY_CHAR_CAPITAL_B: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('B'),
-    modifiers: KeyModifiers::SHIFT,
-});
+// pub const MSG_KEY_CHAR_B: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('b'),
+//     modifiers: KeyModifiers::NONE,
+// });
+// pub const MSG_KEY_CHAR_CAPITAL_B: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('B'),
+//     modifiers: KeyModifiers::SHIFT,
+// });
 
 // pub const MSG_KEY_CHAR_CAPITAL_B: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Char('B'),
@@ -101,47 +101,47 @@ pub const MSG_KEY_CHAR_CAPITAL_B: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Char('c'),
 //     modifiers: KeyModifiers::NONE,
 // });
-pub const MSG_KEY_CHAR_D: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('d'),
-    modifiers: KeyModifiers::NONE,
-});
+// pub const MSG_KEY_CHAR_D: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('d'),
+//     modifiers: KeyModifiers::NONE,
+// });
 
-pub const MSG_KEY_CHAR_CAPITAL_D: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('D'),
-    modifiers: KeyModifiers::SHIFT,
-});
+// pub const MSG_KEY_CHAR_CAPITAL_D: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('D'),
+//     modifiers: KeyModifiers::SHIFT,
+// });
 
 // pub const MSG_KEY_CHAR_E: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Char('e'),
 //     modifiers: KeyModifiers::NONE,
 // });
-pub const MSG_KEY_CHAR_F: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('f'),
-    modifiers: KeyModifiers::NONE,
-});
-pub const MSG_KEY_CHAR_CAPITAL_F: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('F'),
-    modifiers: KeyModifiers::SHIFT,
-});
+// pub const MSG_KEY_CHAR_F: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('f'),
+//     modifiers: KeyModifiers::NONE,
+// });
+// pub const MSG_KEY_CHAR_CAPITAL_F: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('F'),
+//     modifiers: KeyModifiers::SHIFT,
+// });
 
 // pub const MSG_KEY_CHAR_CAPITAL_F: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Char('F'),
 //     modifiers: KeyModifiers::SHIFT,
 // });
 
-pub const MSG_KEY_CHAR_G: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('g'),
-    modifiers: KeyModifiers::NONE,
-});
-pub const MSG_KEY_CHAR_CAPITAL_G: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('G'),
-    modifiers: KeyModifiers::SHIFT,
-});
+// pub const MSG_KEY_CHAR_G: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('g'),
+//     modifiers: KeyModifiers::NONE,
+// });
+// pub const MSG_KEY_CHAR_CAPITAL_G: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('G'),
+//     modifiers: KeyModifiers::SHIFT,
+// });
 
-pub const MSG_KEY_CHAR_H: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('h'),
-    modifiers: KeyModifiers::NONE,
-});
+// pub const MSG_KEY_CHAR_H: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('h'),
+//     modifiers: KeyModifiers::NONE,
+// });
 // pub const MSG_KEY_CHAR_I: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Char('i'),
 //     modifiers: KeyModifiers::NONE,
@@ -156,79 +156,79 @@ pub const MSG_KEY_CHAR_K: Msg = Msg::OnKey(KeyEvent {
     modifiers: KeyModifiers::NONE,
 });
 // */
-pub const MSG_KEY_CHAR_L: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('l'),
-    modifiers: KeyModifiers::NONE,
-});
-pub const MSG_KEY_CHAR_CAPITAL_L: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('L'),
-    modifiers: KeyModifiers::SHIFT,
-});
+// pub const MSG_KEY_CHAR_L: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('l'),
+//     modifiers: KeyModifiers::NONE,
+// });
+// pub const MSG_KEY_CHAR_CAPITAL_L: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('L'),
+//     modifiers: KeyModifiers::SHIFT,
+// });
 
-// /*
-pub const MSG_KEY_CHAR_M: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('m'),
-    modifiers: KeyModifiers::NONE,
-});
-// */
-pub const MSG_KEY_CHAR_N: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('n'),
-    modifiers: KeyModifiers::NONE,
-});
-pub const MSG_KEY_CHAR_CAPITAL_N: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('N'),
-    modifiers: KeyModifiers::SHIFT,
-});
+// // /*
+// pub const MSG_KEY_CHAR_M: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('m'),
+//     modifiers: KeyModifiers::NONE,
+// });
+// // */
+// pub const MSG_KEY_CHAR_N: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('n'),
+//     modifiers: KeyModifiers::NONE,
+// });
+// pub const MSG_KEY_CHAR_CAPITAL_N: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('N'),
+//     modifiers: KeyModifiers::SHIFT,
+// });
 
 // pub const MSG_KEY_CHAR_O: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Char('o'),
 //     modifiers: KeyModifiers::NONE,
 // });
 // /*
-pub const MSG_KEY_CHAR_P: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('p'),
-    modifiers: KeyModifiers::NONE,
-});
+// pub const MSG_KEY_CHAR_P: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('p'),
+//     modifiers: KeyModifiers::NONE,
+// });
 // */
 pub const MSG_KEY_CHAR_CAPITAL_Q: Msg = Msg::OnKey(KeyEvent {
     code: KeyCode::Char('Q'),
     modifiers: KeyModifiers::SHIFT,
 });
-pub const MSG_KEY_CHAR_CAPITAL_T: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('T'),
-    modifiers: KeyModifiers::SHIFT,
-});
-pub const MSG_KEY_CHAR_PLUS: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('+'),
-    modifiers: KeyModifiers::NONE,
-});
-pub const MSG_KEY_CHAR_MINUS: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('-'),
-    modifiers: KeyModifiers::NONE,
-});
-pub const MSG_KEY_CHAR_EQUAL: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('='),
-    modifiers: KeyModifiers::NONE,
-});
-pub const MSG_KEY_CHAR_DASH: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('_'),
-    modifiers: KeyModifiers::NONE,
-});
+// pub const MSG_KEY_CHAR_CAPITAL_T: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('T'),
+//     modifiers: KeyModifiers::SHIFT,
+// });
+// pub const MSG_KEY_CHAR_PLUS: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('+'),
+//     modifiers: KeyModifiers::NONE,
+// });
+// pub const MSG_KEY_CHAR_MINUS: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('-'),
+//     modifiers: KeyModifiers::NONE,
+// });
+// pub const MSG_KEY_CHAR_EQUAL: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('='),
+//     modifiers: KeyModifiers::NONE,
+// });
+// pub const MSG_KEY_CHAR_DASH: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('_'),
+//     modifiers: KeyModifiers::NONE,
+// });
 
-pub const MSG_KEY_CHAR_R: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('r'),
-    modifiers: KeyModifiers::NONE,
-});
+// pub const MSG_KEY_CHAR_R: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('r'),
+//     modifiers: KeyModifiers::NONE,
+// });
 
-pub const MSG_KEY_CHAR_S: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('s'),
-    modifiers: KeyModifiers::NONE,
-});
-// /*
-pub const MSG_KEY_CHAR_T: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('t'),
-    modifiers: KeyModifiers::NONE,
-});
+// pub const MSG_KEY_CHAR_S: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('s'),
+//     modifiers: KeyModifiers::NONE,
+// });
+// // /*
+// pub const MSG_KEY_CHAR_T: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('t'),
+//     modifiers: KeyModifiers::NONE,
+// });
 // */
 // pub const MSG_KEY_CHAR_U: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Char('u'),
@@ -248,10 +248,10 @@ pub const MSG_KEY_CHAR_T: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Char('x'),
 //     modifiers: KeyModifiers::NONE,
 // });
-pub const MSG_KEY_CHAR_Y: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('y'),
-    modifiers: KeyModifiers::NONE,
-});
+// pub const MSG_KEY_CHAR_Y: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('y'),
+//     modifiers: KeyModifiers::NONE,
+// });
 // /*
 // pub const MSG_KEY_CHAR_Z: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Char('z'),
@@ -273,10 +273,10 @@ pub const MSG_KEY_CTRL_H: Msg = Msg::OnKey(KeyEvent {
     modifiers: KeyModifiers::CONTROL,
 });
 
-pub const MSG_KEY_SLASH: Msg = Msg::OnKey(KeyEvent {
-    code: KeyCode::Char('/'),
-    modifiers: KeyModifiers::NONE,
-});
+// pub const MSG_KEY_SLASH: Msg = Msg::OnKey(KeyEvent {
+//     code: KeyCode::Char('/'),
+//     modifiers: KeyModifiers::NONE,
+// });
 
 // pub const MSG_KEY_QUESTION_MARK: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Char('?'),

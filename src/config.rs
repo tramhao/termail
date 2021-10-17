@@ -30,6 +30,7 @@ use std::path::PathBuf;
 pub const MUSIC_DIR: &str = "~/Music";
 
 #[derive(Clone, Deserialize, Serialize)]
+#[allow(clippy::module_name_repetitions)]
 pub struct TermailConfig {
     pub music_dir: String,
     #[serde(skip_serializing)]

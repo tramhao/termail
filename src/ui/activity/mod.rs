@@ -37,7 +37,7 @@ use serde::{Deserialize, Serialize};
 
 pub enum ExitReason {
     Quit,
-    NeedRefreshPlaylist(String),
+    // NeedRefreshPlaylist(String),
     /* Disconnect,
      * EnterSetup, */
 }

@@ -78,7 +78,6 @@ impl TermailActivity {
     pub fn init_config(&mut self, config: &TermailConfig) {
         self.config = config.clone();
     }
-    pub fn run(&mut self) {}
 }
 
 impl Activity for TermailActivity {

@@ -51,6 +51,7 @@ use tuirealm::{
 // tui
 use tui_realm_treeview::{TreeView, TreeViewPropsBuilder};
 
+#[allow(unused)]
 impl TermailActivity {
     // -- view
 

@@ -27,7 +27,7 @@ use crossterm::execute;
 use crossterm::terminal::{
     disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen,
 };
-use std::io::{stdout, Stdout, Write};
+use std::io::{stdout, Stdout};
 use tuirealm::tui::backend::CrosstermBackend;
 use tuirealm::tui::Terminal as TuiTerminal;
 
@@ -71,12 +71,6 @@ impl Context {
 
     pub fn clear_screen(&mut self) {
         let _drop = self.context.clear();
-    }
-
-    pub fn clear_image(&mut self) {
-        if write!(self.context.backend_mut(), "\x1b_Ga=d\x1b\\").is_ok()
-            && self.context.backend_mut().flush().is_ok()
-        {}
     }
 }
 
