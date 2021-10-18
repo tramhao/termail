@@ -1,3 +1,4 @@
+use super::TermailActivity;
 /**
  * MIT License
  *
@@ -23,17 +24,14 @@
  */
 // Locals
 use super::{
-    TermailActivity, COMPONENT_CONFIRMATION_INPUT, COMPONENT_CONFIRMATION_RADIO,
-    COMPONENT_INPUT_SEARCH_LIBRARY, COMPONENT_INPUT_URL, COMPONENT_LABEL_HELP,
-    COMPONENT_PARAGRAPH_LYRIC, COMPONENT_PROGRESS, COMPONENT_TABLE_PLAYLIST,
-    COMPONENT_TABLE_SEARCH_LIBRARY, COMPONENT_TABLE_YOUTUBE, COMPONENT_TEXT_ERROR,
-    COMPONENT_TEXT_HELP, COMPONENT_TEXT_MESSAGE, COMPONENT_TREEVIEW_LIBRARY,
+    COMPONENT_LABEL_HELP, COMPONENT_PARAGRAPH_LYRIC, COMPONENT_PROGRESS, COMPONENT_TABLE_PLAYLIST,
+    COMPONENT_TEXT_ERROR, COMPONENT_TEXT_HELP, COMPONENT_TEXT_MESSAGE, COMPONENT_TREEVIEW_LIBRARY,
 };
 use crate::ui::{draw_area_in, draw_area_top_right};
 // Ext
 use tui_realm_stdlib::{
-    Input, InputPropsBuilder, Label, LabelPropsBuilder, Paragraph, ParagraphPropsBuilder,
-    ProgressBar, ProgressBarPropsBuilder, Radio, RadioPropsBuilder, Table, TablePropsBuilder,
+    Label, LabelPropsBuilder, Paragraph, ParagraphPropsBuilder, ProgressBar,
+    ProgressBarPropsBuilder, Table, TablePropsBuilder,
 };
 
 use tuirealm::{
@@ -192,15 +190,6 @@ impl TermailActivity {
                     }
                 }
 
-                if let Some(props) = self.view.get_props(COMPONENT_INPUT_URL) {
-                    if props.visible {
-                        // make popup
-                        let popup = draw_area_in(f.size(), 50, 10);
-                        f.render_widget(Clear, popup);
-                        self.view.render(COMPONENT_INPUT_URL, f, popup);
-                    }
-                }
-
                 if let Some(props) = self.view.get_props(COMPONENT_TEXT_ERROR) {
                     if props.visible {
                         let popup = draw_area_in(f.size(), 50, 10);
@@ -216,64 +205,6 @@ impl TermailActivity {
                         f.render_widget(Clear, popup);
                         // make popup
                         self.view.render(COMPONENT_TEXT_MESSAGE, f, popup);
-                    }
-                }
-
-                if let Some(props) = self.view.get_props(COMPONENT_CONFIRMATION_RADIO) {
-                    if props.visible {
-                        let popup = draw_area_in(f.size(), 20, 10);
-                        f.render_widget(Clear, popup);
-                        // make popup
-                        self.view.render(COMPONENT_CONFIRMATION_RADIO, f, popup);
-                    }
-                }
-
-                if let Some(props) = self.view.get_props(COMPONENT_CONFIRMATION_INPUT) {
-                    if props.visible {
-                        let popup = draw_area_in(f.size(), 20, 10);
-                        f.render_widget(Clear, popup);
-                        // make popup
-                        self.view.render(COMPONENT_CONFIRMATION_INPUT, f, popup);
-                    }
-                }
-
-                if let Some(props) = self.view.get_props(COMPONENT_TABLE_YOUTUBE) {
-                    if props.visible {
-                        let popup = draw_area_in(f.size(), 66, 60);
-                        f.render_widget(Clear, popup);
-                        // make popup
-                        self.view.render(COMPONENT_TABLE_YOUTUBE, f, popup);
-                    }
-                }
-
-                if let Some(props) = self.view.get_props(COMPONENT_INPUT_SEARCH_LIBRARY) {
-                    if props.visible {
-                        let popup = draw_area_in(f.size(), 66, 60);
-                        f.render_widget(Clear, popup);
-                        // make popup
-                        self.view.render(COMPONENT_INPUT_SEARCH_LIBRARY, f, popup);
-                    }
-                }
-                if let Some(props) = self.view.get_props(COMPONENT_TABLE_SEARCH_LIBRARY) {
-                    if props.visible {
-                        let popup = draw_area_in(f.size(), 76, 60);
-                        f.render_widget(Clear, popup);
-                        let popup_chunks = Layout::default()
-                            .direction(Direction::Vertical)
-                            .constraints(
-                                [
-                                    Constraint::Length(3), // Input form
-                                    Constraint::Min(2),    // Yes/No
-                                ]
-                                .as_ref(),
-                            )
-                            .split(popup);
-
-                        // make popup
-                        self.view
-                            .render(COMPONENT_INPUT_SEARCH_LIBRARY, f, popup_chunks[0]);
-                        self.view
-                            .render(COMPONENT_TABLE_SEARCH_LIBRARY, f, popup_chunks[1]);
                     }
                 }
             });
@@ -345,77 +276,6 @@ impl TermailActivity {
                 }
             }
         }
-    }
-
-    /// ### `mount_del_ssh_key`
-    ///
-    /// Mount delete ssh key component
-    pub(super) fn mount_confirmation_radio(&mut self) {
-        self.view.mount(
-            COMPONENT_CONFIRMATION_RADIO,
-            Box::new(Radio::new(
-                RadioPropsBuilder::default()
-                    .with_color(Color::LightRed)
-                    .with_inverted_color(Color::Black)
-                    .with_borders(Borders::ALL, BorderType::Rounded, Color::LightRed)
-                    .with_title("Delete song?", Alignment::Left)
-                    .with_options(&["Yes", "No"])
-                    .with_value(1) // Default: No
-                    .build(),
-            )),
-        );
-        // Active
-        self.view.active(COMPONENT_CONFIRMATION_RADIO);
-    }
-
-    /// ### `umount_del_ssh_key`
-    ///
-    /// Umount delete ssh key
-    pub(super) fn umount_confirmation_radio(&mut self) {
-        self.view.umount(COMPONENT_CONFIRMATION_RADIO);
-    }
-
-    pub(super) fn mount_confirmation_input(&mut self) {
-        self.view.mount(
-            COMPONENT_CONFIRMATION_INPUT,
-            Box::new(Input::new(
-                InputPropsBuilder::default()
-                    .with_label(String::from("Type DELETE to confirm:"), Alignment::Left)
-                    .with_borders(Borders::ALL, BorderType::Rounded, Color::Green)
-                    .build(),
-            )),
-        );
-        self.view.active(COMPONENT_CONFIRMATION_INPUT);
-    }
-
-    /// ### `umount_new_ssh_key`
-    ///
-    /// Umount new ssh key prompt
-    pub(super) fn umount_confirmation_input(&mut self) {
-        self.view.umount(COMPONENT_CONFIRMATION_INPUT);
-    }
-
-    /// ### `mount_new_ssh_key`
-    ///
-    /// Mount new ssh key prompt
-    pub(super) fn mount_youtube_url(&mut self) {
-        self.view.mount(
-            COMPONENT_INPUT_URL,
-            Box::new(Input::new(
-                InputPropsBuilder::default()
-                    .with_label(String::from("Download url or search:"), Alignment::Left)
-                    .with_borders(Borders::ALL, BorderType::Rounded, Color::Green)
-                    .build(),
-            )),
-        );
-        self.view.active(COMPONENT_INPUT_URL);
-    }
-
-    /// ### `umount_new_ssh_key`
-    ///
-    /// Umount new ssh key prompt
-    pub(super) fn umount_youtube_url(&mut self) {
-        self.view.umount(COMPONENT_INPUT_URL);
     }
 
     // /// ### mount_help
@@ -512,91 +372,5 @@ impl TermailActivity {
     /// Umount help
     pub(super) fn umount_help(&mut self) {
         self.view.umount(COMPONENT_TEXT_HELP);
-    }
-
-    /// ### `mount_youtube_options`
-    ///
-    /// Mount youtube options
-    pub(super) fn mount_youtube_options(&mut self) {
-        self.view.mount(
-            COMPONENT_TABLE_YOUTUBE,
-            Box::new(Table::new(
-                TablePropsBuilder::default()
-                    .with_background(Color::Black)
-                    .with_highlighted_str(Some("\u{1f680}"))
-                    .with_highlighted_color(Color::LightBlue)
-                    .with_max_scroll_step(4)
-                    .with_borders(Borders::ALL, BorderType::Rounded, Color::Blue)
-                    .with_title("Tab/Shift+Tab for next and previous page", Alignment::Left)
-                    .scrollable(true)
-                    .with_widths(&[20, 80])
-                    .with_table(
-                        TableBuilder::default()
-                            .add_col(TextSpan::from("Empty result."))
-                            .add_col(TextSpan::from(
-                                "Wait 10 seconds but no results, means all servers are down.",
-                            ))
-                            .build(),
-                    )
-                    .build(),
-            )),
-        );
-        self.view.active(COMPONENT_TABLE_YOUTUBE);
-    }
-
-    /// ### `umount_youtube_options`
-    ///
-    /// Umount youtube options
-    pub(super) fn umount_youtube_options(&mut self) {
-        self.view.umount(COMPONENT_TABLE_YOUTUBE);
-    }
-
-    pub(super) fn mount_search_library(&mut self) {
-        self.view.mount(
-            COMPONENT_INPUT_SEARCH_LIBRARY,
-            Box::new(Input::new(
-                InputPropsBuilder::default()
-                    .with_label(
-                        String::from("Search for: (support * and ?)"),
-                        Alignment::Left,
-                    )
-                    .with_borders(Borders::ALL, BorderType::Rounded, Color::Green)
-                    .build(),
-            )),
-        );
-
-        self.view.mount(
-            COMPONENT_TABLE_SEARCH_LIBRARY,
-            Box::new(Table::new(
-                TablePropsBuilder::default()
-                    .with_background(Color::Black)
-                    .with_highlighted_str(Some("\u{1f680}"))
-                    .with_highlighted_color(Color::LightBlue)
-                    .with_max_scroll_step(4)
-                    .with_borders(Borders::ALL, BorderType::Rounded, Color::Blue)
-                    .with_title(
-                        "Results:(Enter: locate/l: load to playlist)",
-                        Alignment::Left,
-                    )
-                    .scrollable(true)
-                    .with_widths(&[5, 95])
-                    .with_table(
-                        TableBuilder::default()
-                            .add_col(TextSpan::from("Empty result."))
-                            .add_col(TextSpan::from("Loading.."))
-                            .build(),
-                    )
-                    .build(),
-            )),
-        );
-        self.view.active(COMPONENT_INPUT_SEARCH_LIBRARY);
-    }
-
-    /// ### `umount_youtube_options`
-    ///
-    /// Umount youtube options
-    pub(super) fn umount_search_library(&mut self) {
-        self.view.umount(COMPONENT_INPUT_SEARCH_LIBRARY);
-        self.view.umount(COMPONENT_TABLE_SEARCH_LIBRARY);
     }
 }
