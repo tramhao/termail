@@ -9,9 +9,9 @@ on:
     ## - release
 
 env:
-  BIN_NAME: termusic 
-  PROJECT_NAME: termusic 
-  REPO_NAME: tramhao/termusic
+  BIN_NAME: termail
+  PROJECT_NAME: termail
+  REPO_NAME: tramhao/termail
   BREW_TAP: jondot/homebrew-tap
 
 jobs:
