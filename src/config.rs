@@ -1,4 +1,3 @@
-use crate::ui::activity::Loop;
 use anyhow::{anyhow, Result};
 /**
  * MIT License
@@ -27,24 +26,20 @@ use serde::{Deserialize, Serialize};
 use std::fs::{self, read_to_string};
 use std::path::PathBuf;
 
-pub const MUSIC_DIR: &str = "~/Music";
+pub const MAIL_DIR: &str = "~/.local/share/mail";
 
 #[derive(Clone, Deserialize, Serialize)]
 #[allow(clippy::module_name_repetitions)]
 pub struct TermailConfig {
-    pub music_dir: String,
+    pub mail_dir: String,
     #[serde(skip_serializing)]
-    pub music_dir_from_cli: Option<String>,
-    pub loop_mode: Loop,
-    pub volume: i32,
+    pub mail_dir_from_cli: Option<String>,
 }
 impl Default for TermailConfig {
     fn default() -> Self {
         Self {
-            music_dir: MUSIC_DIR.to_string(),
-            music_dir_from_cli: None,
-            loop_mode: Loop::Queue,
-            volume: 70,
+            mail_dir: MAIL_DIR.to_string(),
+            mail_dir_from_cli: None,
         }
     }
 }
@@ -79,7 +74,7 @@ impl TermailConfig {
 pub fn get_app_config_path() -> Result<PathBuf> {
     let mut path =
         dirs_next::config_dir().ok_or_else(|| anyhow!("failed to find os config dir."))?;
-    path.push("termusic");
+    path.push("termail");
 
     if !path.exists() {
         fs::create_dir_all(&path)?;

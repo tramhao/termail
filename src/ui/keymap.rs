@@ -38,10 +38,10 @@ pub const MSG_KEY_ESC: Msg = Msg::OnKey(KeyEvent {
     code: KeyCode::Esc,
     modifiers: KeyModifiers::NONE,
 });
-// pub const MSG_KEY_TAB: Msg = Msg::OnKey(KeyEvent {
-//     code: KeyCode::Tab,
-//     modifiers: KeyModifiers::NONE,
-// });
+pub const MSG_KEY_TAB: Msg = Msg::OnKey(KeyEvent {
+    code: KeyCode::Tab,
+    modifiers: KeyModifiers::NONE,
+});
 
 // pub const MSG_KEY_SHIFT_TAB: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::BackTab,
@@ -138,10 +138,10 @@ pub const MSG_KEY_ESC: Msg = Msg::OnKey(KeyEvent {
 //     modifiers: KeyModifiers::SHIFT,
 // });
 
-// pub const MSG_KEY_CHAR_H: Msg = Msg::OnKey(KeyEvent {
-//     code: KeyCode::Char('h'),
-//     modifiers: KeyModifiers::NONE,
-// });
+pub const MSG_KEY_CHAR_H: Msg = Msg::OnKey(KeyEvent {
+    code: KeyCode::Char('h'),
+    modifiers: KeyModifiers::NONE,
+});
 // pub const MSG_KEY_CHAR_I: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Char('i'),
 //     modifiers: KeyModifiers::NONE,
@@ -156,10 +156,10 @@ pub const MSG_KEY_CHAR_K: Msg = Msg::OnKey(KeyEvent {
     modifiers: KeyModifiers::NONE,
 });
 // */
-// pub const MSG_KEY_CHAR_L: Msg = Msg::OnKey(KeyEvent {
-//     code: KeyCode::Char('l'),
-//     modifiers: KeyModifiers::NONE,
-// });
+pub const MSG_KEY_CHAR_L: Msg = Msg::OnKey(KeyEvent {
+    code: KeyCode::Char('l'),
+    modifiers: KeyModifiers::NONE,
+});
 // pub const MSG_KEY_CHAR_CAPITAL_L: Msg = Msg::OnKey(KeyEvent {
 //     code: KeyCode::Char('L'),
 //     modifiers: KeyModifiers::SHIFT,

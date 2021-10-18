@@ -1,4 +1,3 @@
-use super::TermailActivity;
 /**
  * MIT License
  *
@@ -24,16 +23,15 @@ use super::TermailActivity;
  */
 // Locals
 use super::{
-    COMPONENT_LABEL_HELP, COMPONENT_PARAGRAPH_LYRIC, COMPONENT_PROGRESS, COMPONENT_TABLE_PLAYLIST,
-    COMPONENT_TEXT_ERROR, COMPONENT_TEXT_HELP, COMPONENT_TEXT_MESSAGE, COMPONENT_TREEVIEW_LIBRARY,
+    TermailActivity, COMPONENT_LABEL_HELP, COMPONENT_PARAGRACH_MAIL, COMPONENT_TABLE_MAILS,
+    COMPONENT_TEXT_ERROR, COMPONENT_TEXT_HELP, COMPONENT_TEXT_MESSAGE,
+    COMPONENT_TREEVIEW_MAILBOXES,
 };
 use crate::ui::{draw_area_in, draw_area_top_right};
 // Ext
 use tui_realm_stdlib::{
-    Label, LabelPropsBuilder, Paragraph, ParagraphPropsBuilder, ProgressBar,
-    ProgressBarPropsBuilder, Table, TablePropsBuilder,
+    Label, LabelPropsBuilder, Paragraph, ParagraphPropsBuilder, Table, TablePropsBuilder,
 };
-
 use tuirealm::{
     props::{
         borders::{BorderType, Borders},
@@ -61,19 +59,6 @@ impl TermailActivity {
         self.view = View::init();
         // Let's mount the component we need
         self.view.mount(
-            COMPONENT_PROGRESS,
-            Box::new(ProgressBar::new(
-                ProgressBarPropsBuilder::default()
-                    .with_borders(Borders::ALL, BorderType::Rounded, Color::LightMagenta)
-                    .with_progbar_color(Color::LightYellow)
-                    .with_title("Playing", Alignment::Center)
-                    .with_label("Song Name")
-                    .with_background(Color::Black)
-                    .with_progress(0.0)
-                    .build(),
-            )),
-        );
-        self.view.mount(
             COMPONENT_LABEL_HELP,
             Box::new(Label::new(
                 LabelPropsBuilder::default()
@@ -86,13 +71,13 @@ impl TermailActivity {
             )),
         );
         self.view.mount(
-            COMPONENT_PARAGRAPH_LYRIC,
+            COMPONENT_PARAGRACH_MAIL,
             Box::new(Paragraph::new(
                 ParagraphPropsBuilder::default()
                     .with_foreground(Color::Cyan)
                     .with_borders(Borders::ALL, BorderType::Rounded, Color::Green)
-                    .with_title("Lyrics", Alignment::Left)
-                    .with_texts(vec![TextSpan::new("No Lyrics available.")
+                    .with_title("Mail", Alignment::Left)
+                    .with_texts(vec![TextSpan::new("No mail available.")
                         .underlined()
                         .fg(Color::Green)])
                     .build(),
@@ -101,7 +86,7 @@ impl TermailActivity {
 
         // Scrolltable
         self.view.mount(
-            COMPONENT_TABLE_PLAYLIST,
+            COMPONENT_TABLE_MAILS,
             Box::new(Table::new(
                 TablePropsBuilder::default()
                     .with_background(Color::Black)
@@ -110,8 +95,8 @@ impl TermailActivity {
                     .with_max_scroll_step(4)
                     .with_borders(Borders::ALL, BorderType::Thick, Color::Blue)
                     .scrollable(true)
-                    .with_title("Playlist", Alignment::Left)
-                    .with_header(&["Duration", "Artist", "Title", "Album"])
+                    .with_title("Mails", Alignment::Left)
+                    .with_header(&["Date", "Time", "Sender", "Title"])
                     .with_widths(&[10, 20, 25, 45])
                     .with_table(
                         TableBuilder::default()
@@ -126,21 +111,21 @@ impl TermailActivity {
         );
 
         self.view.mount(
-            COMPONENT_TREEVIEW_LIBRARY,
+            COMPONENT_TREEVIEW_MAILBOXES,
             Box::new(TreeView::new(
                 TreeViewPropsBuilder::default()
                     .with_borders(Borders::ALL, BorderType::Rounded, Color::LightYellow)
                     .with_foreground(Color::LightYellow)
                     .with_background(Color::Black)
-                    .with_title("Library", Alignment::Left)
-                    // .with_tree_and_depth(self.tree.root(), 3)
+                    .with_title("Mailboxes", Alignment::Left)
+                    .with_tree_and_depth(self.tree.root(), 2)
                     .with_highlighted_str("\u{1f680}")
                     .build(),
             )),
         );
 
         // We need to initialize the focus
-        self.view.active(COMPONENT_TREEVIEW_LIBRARY);
+        self.view.active(COMPONENT_TREEVIEW_MAILBOXES);
     }
 
     /// View gui
@@ -162,24 +147,15 @@ impl TermailActivity {
                 let chunks_right = Layout::default()
                     .direction(Direction::Vertical)
                     .margin(0)
-                    .constraints(
-                        [
-                            Constraint::Min(2),
-                            Constraint::Length(3),
-                            Constraint::Length(4),
-                        ]
-                        .as_ref(),
-                    )
+                    .constraints([Constraint::Min(2), Constraint::Length(10)].as_ref())
                     .split(chunks_left[1]);
 
                 self.view
-                    .render(COMPONENT_TREEVIEW_LIBRARY, f, chunks_left[0]);
+                    .render(COMPONENT_TREEVIEW_MAILBOXES, f, chunks_left[0]);
                 self.view.render(COMPONENT_LABEL_HELP, f, chunks_main[1]);
+                self.view.render(COMPONENT_TABLE_MAILS, f, chunks_right[0]);
                 self.view
-                    .render(COMPONENT_TABLE_PLAYLIST, f, chunks_right[0]);
-                self.view.render(COMPONENT_PROGRESS, f, chunks_right[1]);
-                self.view
-                    .render(COMPONENT_PARAGRAPH_LYRIC, f, chunks_right[2]);
+                    .render(COMPONENT_PARAGRACH_MAIL, f, chunks_right[1]);
 
                 if let Some(props) = self.view.get_props(COMPONENT_TEXT_HELP) {
                     if props.visible {

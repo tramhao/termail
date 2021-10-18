@@ -21,10 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-use super::{ExitReason, TermailActivity, COMPONENT_TEXT_ERROR, COMPONENT_TEXT_HELP};
+use super::{
+    ExitReason, TermailActivity, COMPONENT_PARAGRACH_MAIL, COMPONENT_TABLE_MAILS,
+    COMPONENT_TEXT_ERROR, COMPONENT_TEXT_HELP, COMPONENT_TREEVIEW_MAILBOXES,
+};
 use crate::ui::keymap::{
-    MSG_KEY_CHAR_CAPITAL_Q, MSG_KEY_CHAR_J, MSG_KEY_CHAR_K, MSG_KEY_CTRL_H, MSG_KEY_ENTER,
-    MSG_KEY_ESC,
+    MSG_KEY_CHAR_CAPITAL_Q, MSG_KEY_CHAR_H, MSG_KEY_CHAR_J, MSG_KEY_CHAR_K, MSG_KEY_CHAR_L,
+    MSG_KEY_CTRL_H, MSG_KEY_ENTER, MSG_KEY_ESC, MSG_KEY_TAB,
 };
 use tuirealm::{
     event::{Event, KeyCode, KeyEvent, KeyModifiers},
@@ -55,6 +58,39 @@ impl TermailActivity {
                     | (key == &MSG_KEY_CHAR_CAPITAL_Q) =>
             {
                 self.umount_error();
+                None
+            }
+
+            (COMPONENT_TREEVIEW_MAILBOXES, key) if (key == &MSG_KEY_TAB) => {
+                self.view.active(COMPONENT_TABLE_MAILS);
+                None
+            }
+
+            (COMPONENT_TREEVIEW_MAILBOXES, key) if (key == &MSG_KEY_CHAR_H) => {
+                let event: Event = Event::Key(KeyEvent {
+                    code: KeyCode::Left,
+                    modifiers: KeyModifiers::NONE,
+                });
+                self.view.on(event);
+                None
+            }
+
+            (COMPONENT_TREEVIEW_MAILBOXES, key) if (key == &MSG_KEY_CHAR_L) => {
+                let event: Event = Event::Key(KeyEvent {
+                    code: KeyCode::Right,
+                    modifiers: KeyModifiers::NONE,
+                });
+                self.view.on(event);
+                None
+            }
+
+            (COMPONENT_TABLE_MAILS, key) if (key == &MSG_KEY_TAB) => {
+                self.view.active(COMPONENT_PARAGRACH_MAIL);
+                None
+            }
+
+            (COMPONENT_PARAGRACH_MAIL, key) if (key == &MSG_KEY_TAB) => {
+                self.view.active(COMPONENT_TREEVIEW_MAILBOXES);
                 None
             }
 

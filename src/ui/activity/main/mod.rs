@@ -25,20 +25,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+mod mailboxes;
 mod update;
 mod view;
 use super::{Activity, Context, ExitReason};
-use crate::config::TermailConfig;
+use crate::config::{TermailConfig, MAIL_DIR};
 use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
 use log::error;
+use std::path::{Path, PathBuf};
+use tui_realm_treeview::Tree;
 use tuirealm::View;
 
 // -- components
 const COMPONENT_LABEL_HELP: &str = "LABEL_HELP";
-const COMPONENT_PARAGRAPH_LYRIC: &str = "PARAGRAPH_LYRIC";
-const COMPONENT_TABLE_PLAYLIST: &str = "SCROLLTABLE_PLAYLIST";
-const COMPONENT_TREEVIEW_LIBRARY: &str = "TREEVIEW";
-const COMPONENT_PROGRESS: &str = "PROGRESS";
+const COMPONENT_PARAGRACH_MAIL: &str = "PARAGRAPH_MAIL";
+const COMPONENT_TABLE_MAILS: &str = "TABLE_MAILS";
+const COMPONENT_TREEVIEW_MAILBOXES: &str = "TREEVIEW_MAILBOXES";
 const COMPONENT_TEXT_HELP: &str = "TEXT_HELP";
 const COMPONENT_TEXT_ERROR: &str = "TEXT_ERROR";
 const COMPONENT_TEXT_MESSAGE: &str = "TEXT_MESSAGE";
@@ -53,16 +55,22 @@ pub struct TermailActivity {
     context: Option<Context>, // Context holder
     view: View,               // View
     redraw: bool,
+    path: PathBuf,
+    tree: Tree,
     config: TermailConfig,
 }
 impl Default for TermailActivity {
     fn default() -> Self {
+        let full_path = shellexpand::tilde(MAIL_DIR);
+        let p: &Path = Path::new(full_path.as_ref());
         let config = TermailConfig::default();
         Self {
             exit_reason: None,
             context: None,
             view: View::init(),
             redraw: true, // Draw at first `on_draw`
+            path: p.to_path_buf(),
+            tree: Tree::new(Self::dir_tree(p, 3)),
             config,
         }
     }
@@ -71,6 +79,16 @@ impl Default for TermailActivity {
 impl TermailActivity {
     pub fn init_config(&mut self, config: &TermailConfig) {
         self.config = config.clone();
+        if let Some(mail_dir) = self.config.mail_dir_from_cli.clone() {
+            let full_path = shellexpand::tilde(&mail_dir);
+            let p: &Path = Path::new(full_path.as_ref());
+            self.scan_dir(p);
+        } else {
+            let mail_dir = self.config.mail_dir.clone();
+            let full_path = shellexpand::tilde(&mail_dir);
+            let p: &Path = Path::new(full_path.as_ref());
+            self.scan_dir(p);
+        }
     }
 }
 
