@@ -26,6 +26,7 @@
  * SOFTWARE.
  */
 mod mailboxes;
+mod maillist;
 mod update;
 mod view;
 use super::{Activity, Context, ExitReason};
@@ -39,7 +40,7 @@ use tuirealm::View;
 // -- components
 const COMPONENT_LABEL_HELP: &str = "LABEL_HELP";
 const COMPONENT_PARAGRACH_MAIL: &str = "PARAGRAPH_MAIL";
-const COMPONENT_TABLE_MAILS: &str = "TABLE_MAILS";
+const COMPONENT_TABLE_MAILLIST: &str = "TABLE_MAILS";
 const COMPONENT_TREEVIEW_MAILBOXES: &str = "TREEVIEW_MAILBOXES";
 const COMPONENT_TEXT_HELP: &str = "TEXT_HELP";
 const COMPONENT_TEXT_ERROR: &str = "TEXT_ERROR";

@@ -23,7 +23,7 @@
  */
 // Locals
 use super::{
-    TermailActivity, COMPONENT_LABEL_HELP, COMPONENT_PARAGRACH_MAIL, COMPONENT_TABLE_MAILS,
+    TermailActivity, COMPONENT_LABEL_HELP, COMPONENT_PARAGRACH_MAIL, COMPONENT_TABLE_MAILLIST,
     COMPONENT_TEXT_ERROR, COMPONENT_TEXT_HELP, COMPONENT_TEXT_MESSAGE,
     COMPONENT_TREEVIEW_MAILBOXES,
 };
@@ -86,7 +86,7 @@ impl TermailActivity {
 
         // Scrolltable
         self.view.mount(
-            COMPONENT_TABLE_MAILS,
+            COMPONENT_TABLE_MAILLIST,
             Box::new(Table::new(
                 TablePropsBuilder::default()
                     .with_background(Color::Black)
@@ -96,8 +96,8 @@ impl TermailActivity {
                     .with_borders(Borders::ALL, BorderType::Thick, Color::Blue)
                     .scrollable(true)
                     .with_title("Mails", Alignment::Left)
-                    .with_header(&["Date", "Time", "Sender", "Title"])
-                    .with_widths(&[10, 20, 25, 45])
+                    .with_header(&["Idx", "Time", "Sender", "Title"])
+                    .with_widths(&[5, 20, 25, 50])
                     .with_table(
                         TableBuilder::default()
                             .add_col(TextSpan::from("Loading.."))
@@ -142,7 +142,7 @@ impl TermailActivity {
                 let chunks_left = Layout::default()
                     .direction(Direction::Horizontal)
                     .margin(0)
-                    .constraints([Constraint::Ratio(1, 3), Constraint::Ratio(2, 3)].as_ref())
+                    .constraints([Constraint::Ratio(2, 7), Constraint::Ratio(5, 7)].as_ref())
                     .split(chunks_main[0]);
                 let chunks_right = Layout::default()
                     .direction(Direction::Vertical)
@@ -153,7 +153,8 @@ impl TermailActivity {
                 self.view
                     .render(COMPONENT_TREEVIEW_MAILBOXES, f, chunks_left[0]);
                 self.view.render(COMPONENT_LABEL_HELP, f, chunks_main[1]);
-                self.view.render(COMPONENT_TABLE_MAILS, f, chunks_right[0]);
+                self.view
+                    .render(COMPONENT_TABLE_MAILLIST, f, chunks_right[0]);
                 self.view
                     .render(COMPONENT_PARAGRACH_MAIL, f, chunks_right[1]);
 

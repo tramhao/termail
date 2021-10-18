@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 use super::{
-    ExitReason, TermailActivity, COMPONENT_PARAGRACH_MAIL, COMPONENT_TABLE_MAILS,
+    ExitReason, TermailActivity, COMPONENT_PARAGRACH_MAIL, COMPONENT_TABLE_MAILLIST,
     COMPONENT_TEXT_ERROR, COMPONENT_TEXT_HELP, COMPONENT_TREEVIEW_MAILBOXES,
 };
 use crate::ui::keymap::{
@@ -31,7 +31,7 @@ use crate::ui::keymap::{
 };
 use tuirealm::{
     event::{Event, KeyCode, KeyEvent, KeyModifiers},
-    Msg,
+    Msg, Payload, Value,
 };
 
 impl TermailActivity {
@@ -62,7 +62,7 @@ impl TermailActivity {
             }
 
             (COMPONENT_TREEVIEW_MAILBOXES, key) if (key == &MSG_KEY_TAB) => {
-                self.view.active(COMPONENT_TABLE_MAILS);
+                self.view.active(COMPONENT_TABLE_MAILLIST);
                 None
             }
 
@@ -84,8 +84,13 @@ impl TermailActivity {
                 None
             }
 
-            (COMPONENT_TABLE_MAILS, key) if (key == &MSG_KEY_TAB) => {
-                self.view.active(COMPONENT_PARAGRACH_MAIL);
+            (COMPONENT_TREEVIEW_MAILBOXES, Msg::OnSubmit(Payload::One(Value::Str(node_id)))) => {
+                self.load_mailbox(node_id);
+                None
+            }
+
+            (COMPONENT_TABLE_MAILLIST, key) if (key == &MSG_KEY_TAB) => {
+                self.view.active(COMPONENT_TREEVIEW_MAILBOXES);
                 None
             }
 
