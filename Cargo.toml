@@ -19,23 +19,23 @@ path = "src/main.rs"
 
 [dependencies]
 anyhow = "1.0"
-byteorder = "1"
+# byteorder = "1"
 crossterm = "0.20"
-dbus = {version="0.9",optional = true}
-dbus-crossroads = { version="0.5",optional = true}
+# dbus = {version="0.9",optional = true}
+# dbus-crossroads = { version="0.5",optional = true}
 dirs-next = "2.0"
-hex = "0.4"
-humantime = "2.1"
-image = "0.23"
-lazy_static = "1.4"
+# hex = "0.4"
+# humantime = "2.1"
+# image = "0.23"
+# lazy_static = "1.4"
 log = "0.4"
-pinyin = "0.8"
-rand = "0.8"
-regex = "1.5"
+# pinyin = "0.8"
+# rand = "0.8"
+# regex = "1.5"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 shellexpand = "2.1"
-textwrap = "0.14"
+# textwrap = "0.14"
 toml = "0.5"
 tuirealm = "0.6" 
 tui-realm-stdlib = "0.6"
