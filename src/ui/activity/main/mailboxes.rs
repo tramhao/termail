@@ -30,12 +30,8 @@ use tui_realm_treeview::{Node, Tree};
 impl TermailActivity {
     pub fn scan_dir(&mut self, p: &Path) {
         self.path = p.to_path_buf();
-        self.tree = Tree::new(Self::dir_tree(p, 3));
+        self.tree = Tree::new(Self::dir_tree(p, 2));
     }
-
-    // pub fn upper_dir(&self) -> Option<&Path> {
-    //     self.path.parent()
-    // }
 
     pub fn dir_tree(p: &Path, depth: usize) -> Node {
         let mut name: String = match p.file_name() {
@@ -43,11 +39,24 @@ impl TermailActivity {
             Some(n) => n.to_string_lossy().into_owned(),
         };
 
-        let mail_dir = Maildir::from(p.to_string_lossy().to_string());
-        let new_items = mail_dir.list_new().count();
-        if new_items > 0 {
+        let mut new_items_total = 0;
+        if p.is_dir() {
+            let mail_dir = Maildir::from(p.to_string_lossy().to_string());
+            let new_items = mail_dir.count_new();
+            new_items_total += new_items;
+            if let Ok(paths) = std::fs::read_dir(p) {
+                let paths: Vec<_> = paths.filter_map(std::result::Result::ok).collect();
+                for p in paths {
+                    let mail_dir = Maildir::from(p.path().to_string_lossy().to_string());
+                    let new_items = mail_dir.count_new();
+                    new_items_total += new_items;
+                }
+            }
+        }
+
+        if new_items_total > 0 {
             name.push('(');
-            name.push_str(&new_items.to_string());
+            name.push_str(&new_items_total.to_string());
             name.push(')');
         }
 
@@ -67,23 +76,4 @@ impl TermailActivity {
         }
         node
     }
-
-    // pub fn dir_children(p: &Path) -> Vec<String> {
-    //     let mut children: Vec<String> = vec![];
-    //     if p.is_dir() {
-    //         if let Ok(paths) = std::fs::read_dir(p) {
-    //             let mut paths: Vec<_> = paths.filter_map(std::result::Result::ok).collect();
-
-    //             // paths.sort_by_cached_key(|k| {
-    //             //     get_pin_yin(&k.file_name().to_string_lossy().to_string())
-    //             // });
-    //             for p in paths {
-    //                 if !p.path().is_dir() {
-    //                     children.push(String::from(p.path().to_string_lossy()));
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     children
-    // }
 }

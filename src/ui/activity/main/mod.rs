@@ -33,6 +33,8 @@ use super::{Activity, Context, ExitReason};
 use crate::config::{TermailConfig, MAIL_DIR};
 use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
 use log::error;
+use maildir::MailEntry;
+use std::collections::VecDeque;
 use std::path::{Path, PathBuf};
 use tui_realm_treeview::Tree;
 use tuirealm::View;
@@ -59,6 +61,7 @@ pub struct TermailActivity {
     path: PathBuf,
     tree: Tree,
     config: TermailConfig,
+    mail_items: VecDeque<MailEntry>,
 }
 impl Default for TermailActivity {
     fn default() -> Self {
@@ -71,8 +74,9 @@ impl Default for TermailActivity {
             view: View::init(),
             redraw: true, // Draw at first `on_draw`
             path: p.to_path_buf(),
-            tree: Tree::new(Self::dir_tree(p, 3)),
+            tree: Tree::new(Self::dir_tree(p, 2)),
             config,
+            mail_items: VecDeque::new(),
         }
     }
 }

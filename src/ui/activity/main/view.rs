@@ -97,7 +97,7 @@ impl TermailActivity {
                     .scrollable(true)
                     .with_title("Mail List", Alignment::Left)
                     .with_header(&["Idx", "Time", "From", "Title"])
-                    .with_widths(&[5, 20, 20, 55])
+                    .with_widths(&[5, 18, 22, 55])
                     .with_table(
                         TableBuilder::default()
                             .add_col(TextSpan::from("Loading.."))

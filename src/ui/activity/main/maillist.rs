@@ -46,6 +46,7 @@ impl TermailActivity {
 
         let mut table: TableBuilder = TableBuilder::default();
         // Add new items
+        let mut mail_index = 0;
         for (idx, record) in mail_new_entries.enumerate() {
             if record.is_err() {
                 continue;
@@ -72,22 +73,24 @@ impl TermailActivity {
             // Create DateTime from SystemTime
             let datetime = DateTime::<Local>::from(d);
             // Formats the combined date and time with the specified format string.
-            let timestamp_str = datetime.format("%Y-%m-%d %H:%M").to_string();
+            let timestamp_str = datetime.format("%y-%m-%d %H:%M").to_string();
+            mail_index += 1;
+            self.mail_items.push_back(record);
             table
-                .add_col(TextSpan::new(idx.to_string()))
+                .add_col(TextSpan::new(mail_index.to_string()))
                 .add_col(TextSpan::new(timestamp_str).fg(Color::LightYellow))
                 .add_col(TextSpan::new(sender).bold().fg(Color::Green))
                 .add_col(TextSpan::new(subject).bold().fg(Color::Green));
         }
 
         // Add read items
-        for (idx, record) in mail_cur_entries.enumerate() {
+        for record in mail_cur_entries {
             if record.is_err() {
                 continue;
             }
             let mut record = record.unwrap();
 
-            if idx > 0 {
+            if mail_index > 0 {
                 table.add_row();
             }
 
@@ -108,26 +111,25 @@ impl TermailActivity {
             // Create DateTime from SystemTime
             let datetime = DateTime::<Local>::from(d);
             // Formats the combined date and time with the specified format string.
-            let timestamp_str = datetime.format("%Y-%m-%d %H:%M").to_string();
+            let timestamp_str = datetime.format("%y-%m-%d %H:%M").to_string();
+            mail_index += 1;
+            self.mail_items.push_back(record);
             table
-                .add_col(TextSpan::new(idx.to_string()))
+                .add_col(TextSpan::new(mail_index.to_string()))
                 .add_col(TextSpan::new(timestamp_str).fg(tuirealm::tui::style::Color::LightYellow))
                 .add_col(TextSpan::new(sender))
                 .add_col(TextSpan::new(subject));
         }
 
-        // if mail_cur_entries.count() == 0 {
-        //     table.add_col(TextSpan::from(""));
-        //     table.add_col(TextSpan::from(""));
-        //     table.add_col(TextSpan::from("empty maillist"));
-        //     table.add_col(TextSpan::from(""));
-        // }
+        if mail_index == 0 {
+            return;
+            // table.add_col(TextSpan::from(""));
+            // table.add_col(TextSpan::from(""));
+            // table.add_col(TextSpan::from("empty maillist"));
+            // table.add_col(TextSpan::from(""));
+        }
 
         let table = table.build();
-
-        if table.len() == 1 {
-            return;
-        }
 
         if let Some(props) = self.view.get_props(COMPONENT_TABLE_MAILLIST) {
             let props = TablePropsBuilder::from(props).with_table(table).build();
