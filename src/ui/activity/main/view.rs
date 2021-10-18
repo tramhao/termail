@@ -95,9 +95,9 @@ impl TermailActivity {
                     .with_max_scroll_step(4)
                     .with_borders(Borders::ALL, BorderType::Thick, Color::Blue)
                     .scrollable(true)
-                    .with_title("Mails", Alignment::Left)
-                    .with_header(&["Idx", "Time", "Sender", "Title"])
-                    .with_widths(&[5, 20, 25, 50])
+                    .with_title("Mail List", Alignment::Left)
+                    .with_header(&["Idx", "Time", "From", "Title"])
+                    .with_widths(&[5, 20, 20, 55])
                     .with_table(
                         TableBuilder::default()
                             .add_col(TextSpan::from("Loading.."))

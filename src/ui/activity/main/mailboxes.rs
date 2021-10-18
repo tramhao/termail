@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 use super::TermailActivity;
+use maildir::Maildir;
 use std::path::Path;
 use tui_realm_treeview::{Node, Tree};
 // use tuirealm::{Payload, PropPayload, PropValue, PropsBuilder, Value};
@@ -37,10 +38,19 @@ impl TermailActivity {
     // }
 
     pub fn dir_tree(p: &Path, depth: usize) -> Node {
-        let name: String = match p.file_name() {
+        let mut name: String = match p.file_name() {
             None => "/".to_string(),
             Some(n) => n.to_string_lossy().into_owned(),
         };
+
+        let mail_dir = Maildir::from(p.to_string_lossy().to_string());
+        let new_items = mail_dir.list_new().count();
+        if new_items > 0 {
+            name.push('(');
+            name.push_str(&new_items.to_string());
+            name.push(')');
+        }
+
         let mut node: Node = Node::new(p.to_string_lossy().into_owned(), name);
         if depth > 0 && p.is_dir() {
             if let Ok(paths) = std::fs::read_dir(p) {
