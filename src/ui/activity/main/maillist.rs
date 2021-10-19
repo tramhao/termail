@@ -21,15 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-use super::{TermailActivity, COMPONENT_TABLE_MAILLIST};
+use super::{TermailActivity, COMPONENT_PARAGRACH_MAIL, COMPONENT_TABLE_MAILLIST};
 // use std::path::Path;
 // use tui_realm_treeview::{Node, Tree};
 // use tuirealm::{Payload, PropPayload, PropValue, PropsBuilder, Value};
+use anyhow::{anyhow, Result};
 use chrono::prelude::DateTime;
 use chrono::Local;
 use maildir::Maildir;
 use mailparse::MailHeaderMap;
 use std::time::{Duration, UNIX_EPOCH};
+use tui_realm_stdlib::ParagraphPropsBuilder;
 use tui_realm_stdlib::TablePropsBuilder;
 use tuirealm::props::{TableBuilder, TextSpan};
 use tuirealm::tui::style::Color;
@@ -137,5 +139,28 @@ impl TermailActivity {
             self.update(&msg);
             self.view.active(COMPONENT_TABLE_MAILLIST);
         }
+    }
+
+    pub fn load_mail(&mut self, index: usize) -> Result<()> {
+        let mail_item = self
+            .mail_items
+            .get_mut(index)
+            .ok_or_else(|| anyhow!("error get mail_item"))?;
+        let parsed_mail = mail_item.parsed()?;
+        let body = parsed_mail.get_body()?;
+        // println!("{}", body);
+        // if let Ok(content) = String::from_utf8(body) {
+        let props = self
+            .view
+            .get_props(COMPONENT_PARAGRACH_MAIL)
+            .ok_or_else(|| anyhow!("error get props"))?;
+        let props = ParagraphPropsBuilder::from(props)
+            .with_texts(vec![TextSpan::new(body)])
+            // .with_texts(vec![TextSpan::new(content)])
+            .build();
+        self.view.update(COMPONENT_PARAGRACH_MAIL, props);
+
+        Ok(())
+        // }
     }
 }

@@ -147,7 +147,7 @@ impl TermailActivity {
                 let chunks_right = Layout::default()
                     .direction(Direction::Vertical)
                     .margin(0)
-                    .constraints([Constraint::Min(2), Constraint::Length(10)].as_ref())
+                    .constraints([Constraint::Min(2), Constraint::Length(18)].as_ref())
                     .split(chunks_left[1]);
 
                 self.view

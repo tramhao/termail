@@ -29,11 +29,9 @@ use crate::ui::keymap::{
     MSG_KEY_CHAR_CAPITAL_Q, MSG_KEY_CHAR_H, MSG_KEY_CHAR_J, MSG_KEY_CHAR_K, MSG_KEY_CHAR_L,
     MSG_KEY_CTRL_H, MSG_KEY_ENTER, MSG_KEY_ESC, MSG_KEY_TAB,
 };
-use tui_realm_stdlib::ParagraphPropsBuilder;
 use tuirealm::{
     event::{Event, KeyCode, KeyEvent, KeyModifiers},
-    props::TextSpan,
-    Msg, Payload, PropsBuilder, Value,
+    Msg, Payload, Value,
 };
 
 impl TermailActivity {
@@ -110,23 +108,22 @@ impl TermailActivity {
                 if let Some(Payload::One(Value::Usize(index))) =
                     self.view.get_state(COMPONENT_TABLE_MAILLIST)
                 {
-                    if let Some(mail_item) = self.mail_items.get_mut(index) {
-                        if let Ok(parsed_mail) = mail_item.parsed() {
-                            if let Ok(body) = parsed_mail.get_body() {
-                                // println!("{}", body);
-                                // if let Ok(content) = String::from_utf8(body) {
-                                if let Some(props) = self.view.get_props(COMPONENT_PARAGRACH_MAIL) {
-                                    let props = ParagraphPropsBuilder::from(props)
-                                        .with_texts(vec![TextSpan::new(body)])
-                                        // .with_texts(vec![TextSpan::new(content)])
-                                        .build();
-                                    self.view.update(COMPONENT_PARAGRACH_MAIL, props);
-                                }
-                                // }
-                            }
+                    match self.load_mail(index) {
+                        Ok(_) => {
+                            self.view.active(COMPONENT_PARAGRACH_MAIL);
                         }
+                        Err(e) => self.mount_error(&e.to_string()),
                     }
                 }
+                None
+            }
+
+            (COMPONENT_TEXT_ERROR, key)
+                if (key == &MSG_KEY_ESC)
+                    | (key == &MSG_KEY_ENTER)
+                    | (key == &MSG_KEY_CHAR_CAPITAL_Q) =>
+            {
+                self.umount_error();
                 None
             }
 
