@@ -75,15 +75,14 @@ impl TermailActivity {
             COMPONENT_TEXTAREA_MAIL,
             Box::new(Textarea::new(
                 TextareaPropsBuilder::default()
-                    // .with_foreground(Color::Cyan)
                     .with_background(Color::Black)
                     .with_borders(Borders::ALL, BorderType::Rounded, Color::Green)
                     .with_highlighted_str(Some("\u{1f680}"))
                     .with_max_scroll_step(4)
                     .with_title("Mail", Alignment::Left)
-                    .with_texts(vec![TextSpan::new("No mail available.")
-                        .underlined()
-                        .fg(Color::Green)])
+                    .with_texts(vec![
+                        TextSpan::new("No mail available.").fg(Color::LightGreen)
+                    ])
                     .build(),
             )),
         );
@@ -104,7 +103,7 @@ impl TermailActivity {
                     .with_widths(&[5, 18, 22, 55])
                     .with_table(
                         TableBuilder::default()
-                            .add_col(TextSpan::from("Loading.."))
+                            .add_col(TextSpan::from("Empty.."))
                             .add_col(TextSpan::from(""))
                             .add_col(TextSpan::from(""))
                             .add_col(TextSpan::from(""))
