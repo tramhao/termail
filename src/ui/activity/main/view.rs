@@ -23,14 +23,15 @@
  */
 // Locals
 use super::{
-    TermailActivity, COMPONENT_LABEL_HELP, COMPONENT_PARAGRACH_MAIL, COMPONENT_TABLE_MAILLIST,
+    TermailActivity, COMPONENT_LABEL_HELP, COMPONENT_TABLE_MAILLIST, COMPONENT_TEXTAREA_MAIL,
     COMPONENT_TEXT_ERROR, COMPONENT_TEXT_HELP, COMPONENT_TEXT_MESSAGE,
     COMPONENT_TREEVIEW_MAILBOXES,
 };
 use crate::ui::{draw_area_in, draw_area_top_right};
 // Ext
 use tui_realm_stdlib::{
-    Label, LabelPropsBuilder, Paragraph, ParagraphPropsBuilder, Table, TablePropsBuilder,
+    Label, LabelPropsBuilder, Paragraph, ParagraphPropsBuilder, Table, TablePropsBuilder, Textarea,
+    TextareaPropsBuilder,
 };
 use tuirealm::{
     props::{
@@ -71,11 +72,14 @@ impl TermailActivity {
             )),
         );
         self.view.mount(
-            COMPONENT_PARAGRACH_MAIL,
-            Box::new(Paragraph::new(
-                ParagraphPropsBuilder::default()
-                    .with_foreground(Color::Cyan)
+            COMPONENT_TEXTAREA_MAIL,
+            Box::new(Textarea::new(
+                TextareaPropsBuilder::default()
+                    // .with_foreground(Color::Cyan)
+                    .with_background(Color::Black)
                     .with_borders(Borders::ALL, BorderType::Rounded, Color::Green)
+                    .with_highlighted_str(Some("\u{1f680}"))
+                    .with_max_scroll_step(4)
                     .with_title("Mail", Alignment::Left)
                     .with_texts(vec![TextSpan::new("No mail available.")
                         .underlined()
@@ -120,6 +124,7 @@ impl TermailActivity {
                     .with_title("Mailboxes", Alignment::Left)
                     .with_tree_and_depth(self.tree.root(), 2)
                     .with_highlighted_str("\u{1f680}")
+                    .keep_state(true)
                     .build(),
             )),
         );
@@ -156,7 +161,7 @@ impl TermailActivity {
                 self.view
                     .render(COMPONENT_TABLE_MAILLIST, f, chunks_right[0]);
                 self.view
-                    .render(COMPONENT_PARAGRACH_MAIL, f, chunks_right[1]);
+                    .render(COMPONENT_TEXTAREA_MAIL, f, chunks_right[1]);
 
                 if let Some(props) = self.view.get_props(COMPONENT_TEXT_HELP) {
                     if props.visible {

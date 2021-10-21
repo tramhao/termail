@@ -21,7 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-use super::{TermailActivity, COMPONENT_PARAGRACH_MAIL, COMPONENT_TABLE_MAILLIST};
+use super::{
+    MailEntryNewOrRead, TermailActivity, COMPONENT_TABLE_MAILLIST, COMPONENT_TEXTAREA_MAIL,
+    COMPONENT_TREEVIEW_MAILBOXES,
+};
 // use std::path::Path;
 // use tui_realm_treeview::{Node, Tree};
 // use tuirealm::{Payload, PropPayload, PropValue, PropsBuilder, Value};
@@ -29,10 +32,11 @@ use anyhow::{anyhow, Result};
 use chrono::prelude::DateTime;
 use chrono::Local;
 use maildir::Maildir;
-use mailparse::MailHeaderMap;
+use mailparse::{MailHeaderMap, ParsedMail};
 use std::time::{Duration, UNIX_EPOCH};
-use tui_realm_stdlib::ParagraphPropsBuilder;
 use tui_realm_stdlib::TablePropsBuilder;
+use tui_realm_stdlib::TextareaPropsBuilder;
+use tui_realm_treeview::TreeViewPropsBuilder;
 use tuirealm::props::{TableBuilder, TextSpan};
 use tuirealm::tui::style::Color;
 use tuirealm::PropsBuilder;
@@ -46,43 +50,16 @@ impl TermailActivity {
         let mail_new_entries = mail_dir.list_new();
         let mail_cur_entries = mail_dir.list_cur();
 
-        let mut table: TableBuilder = TableBuilder::default();
         // Add new items
-        let mut mail_index = 0;
-        for (idx, record) in mail_new_entries.enumerate() {
+        for record in mail_new_entries {
             if record.is_err() {
                 continue;
             }
-            let mut record = record.unwrap();
-
-            if idx > 0 {
-                table.add_row();
-            }
-
-            // let id = record.id();
-            let date = record.date().unwrap_or(0);
-            // let received = record.received().unwrap_or(0);
-            let header = record.headers().unwrap();
-            let sender = header
-                .get_first_value("From")
-                .unwrap_or_else(|| "No Sender".to_string());
-            let subject = header
-                .get_first_value("Subject")
-                .unwrap_or_else(|| "No Subject".to_string());
-            // Creates a new SystemTime from the specified number of whole seconds
-            #[allow(clippy::cast_sign_loss)]
-            let d = UNIX_EPOCH + Duration::from_secs(date as u64);
-            // Create DateTime from SystemTime
-            let datetime = DateTime::<Local>::from(d);
-            // Formats the combined date and time with the specified format string.
-            let timestamp_str = datetime.format("%y-%m-%d %H:%M").to_string();
-            mail_index += 1;
-            self.mail_items.push_back(record);
-            table
-                .add_col(TextSpan::new(mail_index.to_string()))
-                .add_col(TextSpan::new(timestamp_str).fg(Color::LightYellow))
-                .add_col(TextSpan::new(sender).bold().fg(Color::Green))
-                .add_col(TextSpan::new(subject).bold().fg(Color::Green));
+            let record = record.unwrap();
+            self.mail_items.push_back(MailEntryNewOrRead {
+                item: record,
+                new: true,
+            });
         }
 
         // Add read items
@@ -90,23 +67,35 @@ impl TermailActivity {
             if record.is_err() {
                 continue;
             }
-            let mut record = record.unwrap();
+            let record = record.unwrap();
+            self.mail_items.push_back(MailEntryNewOrRead {
+                item: record,
+                new: false,
+            });
+        }
 
-            if mail_index > 0 {
+        self.current_maildir = mail_dir;
+        self.sync_maillist();
+    }
+
+    pub fn sync_maillist(&mut self) {
+        let mut table: TableBuilder = TableBuilder::default();
+        // Add new items
+        for (idx, record) in self.mail_items.iter_mut().enumerate() {
+            if idx > 0 {
                 table.add_row();
             }
 
             // let id = record.id();
-            let date = record.date().unwrap_or(0);
+            let date = record.item.date().unwrap_or(0);
             // let received = record.received().unwrap_or(0);
-            let header = record.headers().unwrap();
+            let header = record.item.headers().unwrap();
             let sender = header
                 .get_first_value("From")
                 .unwrap_or_else(|| "No Sender".to_string());
             let subject = header
                 .get_first_value("Subject")
                 .unwrap_or_else(|| "No Subject".to_string());
-
             // Creates a new SystemTime from the specified number of whole seconds
             #[allow(clippy::cast_sign_loss)]
             let d = UNIX_EPOCH + Duration::from_secs(date as u64);
@@ -114,21 +103,19 @@ impl TermailActivity {
             let datetime = DateTime::<Local>::from(d);
             // Formats the combined date and time with the specified format string.
             let timestamp_str = datetime.format("%y-%m-%d %H:%M").to_string();
-            mail_index += 1;
-            self.mail_items.push_back(record);
             table
-                .add_col(TextSpan::new(mail_index.to_string()))
-                .add_col(TextSpan::new(timestamp_str).fg(tuirealm::tui::style::Color::LightYellow))
-                .add_col(TextSpan::new(sender))
-                .add_col(TextSpan::new(subject));
-        }
+                .add_col(TextSpan::new(idx.to_string()))
+                .add_col(TextSpan::new(timestamp_str).fg(Color::LightYellow));
 
-        if mail_index == 0 {
-            return;
-            // table.add_col(TextSpan::from(""));
-            // table.add_col(TextSpan::from(""));
-            // table.add_col(TextSpan::from("empty maillist"));
-            // table.add_col(TextSpan::from(""));
+            if record.new {
+                table
+                    .add_col(TextSpan::new(sender).bold().fg(Color::Green))
+                    .add_col(TextSpan::new(subject).bold().fg(Color::Green));
+            } else {
+                table
+                    .add_col(TextSpan::new(sender))
+                    .add_col(TextSpan::new(subject));
+            }
         }
 
         let table = table.build();
@@ -146,21 +133,66 @@ impl TermailActivity {
             .mail_items
             .get_mut(index)
             .ok_or_else(|| anyhow!("error get mail_item"))?;
-        let parsed_mail = mail_item.parsed()?;
-        let body = parsed_mail.get_body()?;
-        // println!("{}", body);
-        // if let Ok(content) = String::from_utf8(body) {
+        let parsed_mail = mail_item.item.parsed()?;
+        let content = Self::get_body_recursive(&parsed_mail)?;
+        let mut vec_lines: Vec<TextSpan> = vec![];
+        for line in content.split('\n') {
+            if !line.is_empty() {
+                vec_lines.push(TextSpan::from(line));
+            }
+        }
+
+        // update mail text area
         let props = self
             .view
-            .get_props(COMPONENT_PARAGRACH_MAIL)
+            .get_props(COMPONENT_TEXTAREA_MAIL)
             .ok_or_else(|| anyhow!("error get props"))?;
-        let props = ParagraphPropsBuilder::from(props)
-            .with_texts(vec![TextSpan::new(body)])
-            // .with_texts(vec![TextSpan::new(content)])
+        let props = TextareaPropsBuilder::from(props)
+            // .with_texts(vec![TextSpan::new(body)])
+            .with_texts(vec_lines)
             .build();
-        self.view.update(COMPONENT_PARAGRACH_MAIL, props);
+        self.view.update(COMPONENT_TEXTAREA_MAIL, props);
+        // update mail list
+
+        if mail_item.new {
+            self.current_maildir.move_new_to_cur(mail_item.item.id())?;
+            mail_item.new = false;
+            self.sync_maillist();
+        }
+
+        // update mail box tree view
+        let path = self.path.clone();
+        self.scan_dir(&path);
+        if let Some(props) = self.view.get_props(COMPONENT_TREEVIEW_MAILBOXES) {
+            let props = TreeViewPropsBuilder::from(props)
+                .with_tree_and_depth(self.tree.root(), 2)
+                .build();
+            self.view.update(COMPONENT_TREEVIEW_MAILBOXES, props);
+        }
 
         Ok(())
-        // }
+    }
+
+    fn get_body_recursive(mail: &ParsedMail) -> Result<String> {
+        let mut content = String::new();
+        let parts_quantity = mail.subparts.len();
+        if parts_quantity == 0 {
+            if mail.ctype.mimetype.starts_with("text/plain") {
+                content = mail.get_body()?;
+            } else if mail.ctype.mimetype.starts_with("text/html") {
+                let frag = scraper::Html::parse_fragment(&mail.get_body()?);
+                for node in frag.tree {
+                    if let scraper::node::Node::Text(text) = node {
+                        content.push_str(&text.text);
+                    }
+                }
+            }
+        } else {
+            for i in 0..parts_quantity - 1 {
+                content.push_str(&Self::get_body_recursive(&mail.subparts[i])?);
+            }
+        }
+
+        Ok(content)
     }
 }

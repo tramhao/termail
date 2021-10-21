@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 use super::{
-    ExitReason, TermailActivity, COMPONENT_PARAGRACH_MAIL, COMPONENT_TABLE_MAILLIST,
+    ExitReason, TermailActivity, COMPONENT_TABLE_MAILLIST, COMPONENT_TEXTAREA_MAIL,
     COMPONENT_TEXT_ERROR, COMPONENT_TEXT_HELP, COMPONENT_TREEVIEW_MAILBOXES,
 };
 use crate::ui::keymap::{
@@ -110,7 +110,7 @@ impl TermailActivity {
                 {
                     match self.load_mail(index) {
                         Ok(_) => {
-                            self.view.active(COMPONENT_PARAGRACH_MAIL);
+                            self.view.active(COMPONENT_TEXTAREA_MAIL);
                         }
                         Err(e) => self.mount_error(&e.to_string()),
                     }
@@ -127,8 +127,13 @@ impl TermailActivity {
                 None
             }
 
-            (COMPONENT_PARAGRACH_MAIL, key) if (key == &MSG_KEY_TAB) => {
+            (COMPONENT_TEXTAREA_MAIL, key) if (key == &MSG_KEY_TAB) => {
                 self.view.active(COMPONENT_TREEVIEW_MAILBOXES);
+                None
+            }
+
+            (COMPONENT_TEXTAREA_MAIL, key) if (key == &MSG_KEY_CHAR_H) => {
+                self.view.active(COMPONENT_TABLE_MAILLIST);
                 None
             }
 

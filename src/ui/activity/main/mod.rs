@@ -34,6 +34,7 @@ use crate::config::{TermailConfig, MAIL_DIR};
 use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
 use log::error;
 use maildir::MailEntry;
+use maildir::Maildir;
 use std::collections::VecDeque;
 use std::path::{Path, PathBuf};
 use tui_realm_treeview::Tree;
@@ -41,7 +42,7 @@ use tuirealm::View;
 
 // -- components
 const COMPONENT_LABEL_HELP: &str = "LABEL_HELP";
-const COMPONENT_PARAGRACH_MAIL: &str = "PARAGRAPH_MAIL";
+const COMPONENT_TEXTAREA_MAIL: &str = "PARAGRAPH_MAIL";
 const COMPONENT_TABLE_MAILLIST: &str = "TABLE_MAILS";
 const COMPONENT_TREEVIEW_MAILBOXES: &str = "TREEVIEW_MAILBOXES";
 const COMPONENT_TEXT_HELP: &str = "TEXT_HELP";
@@ -53,6 +54,10 @@ const COMPONENT_TEXT_MESSAGE: &str = "TEXT_MESSAGE";
 /// ## `MainActivity`
 ///
 /// Main activity states holder
+struct MailEntryNewOrRead {
+    item: MailEntry,
+    new: bool,
+}
 pub struct TermailActivity {
     exit_reason: Option<ExitReason>,
     context: Option<Context>, // Context holder
@@ -61,7 +66,8 @@ pub struct TermailActivity {
     path: PathBuf,
     tree: Tree,
     config: TermailConfig,
-    mail_items: VecDeque<MailEntry>,
+    mail_items: VecDeque<MailEntryNewOrRead>,
+    current_maildir: Maildir,
 }
 impl Default for TermailActivity {
     fn default() -> Self {
@@ -77,6 +83,7 @@ impl Default for TermailActivity {
             tree: Tree::new(Self::dir_tree(p, 2)),
             config,
             mail_items: VecDeque::new(),
+            current_maildir: Maildir::from(p.to_path_buf()),
         }
     }
 }
