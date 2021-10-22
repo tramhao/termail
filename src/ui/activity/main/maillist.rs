@@ -31,8 +31,9 @@ use super::{
 use anyhow::{anyhow, Result};
 use chrono::prelude::DateTime;
 use chrono::Local;
-use maildir::Maildir;
+use maildir::{MailEntry, Maildir};
 use mailparse::{MailHeaderMap, ParsedMail};
+use std::collections::VecDeque;
 use std::io::Write;
 use std::time::{Duration, UNIX_EPOCH};
 use tui_realm_stdlib::TablePropsBuilder;
@@ -44,19 +45,23 @@ use tuirealm::PropsBuilder;
 
 impl TermailActivity {
     pub fn load_mailbox(&mut self, node_id: &str) {
+        self.mail_items = VecDeque::new();
         let mail_dir = Maildir::from(node_id);
-        // let mut mail_new_entries: Vec<_> = mail_dir.list_new().map(|m| m.unwrap()).collect();
-        // mail_new_entries.sort_by_key(|mail| mail.date().unwrap_or(0));
-
+        // let mut flag_chars = flags.chars().collect::<Vec<char>>();
         let mail_new_entries = mail_dir.list_new();
+        // sort by date
+        let mut mail_new_entries = mail_new_entries
+            .filter_map(std::result::Result::ok)
+            .collect::<Vec<MailEntry>>();
+        // mail_new_entries.sort_by_cached_key(|k| {
+        // item.date().unwrap_or(0);
+        // });
+        // paths.sort_by_cached_key(|k| get_pin_yin(&k.file_name().to_string_lossy().to_string()));
+
         let mail_cur_entries = mail_dir.list_cur();
 
         // Add new items
         for record in mail_new_entries {
-            if record.is_err() {
-                continue;
-            }
-            let record = record.unwrap();
             self.mail_items.push_back(MailEntryNewOrRead {
                 item: record,
                 new: true,
@@ -138,8 +143,9 @@ impl TermailActivity {
         let content = Self::get_body_recursive(&parsed_mail)?;
         let mut vec_lines: Vec<TextSpan> = vec![];
         for line in content.split('\n') {
-            if line.len() > 10 {
-                vec_lines.push(TextSpan::from(line));
+            let trimed = line.trim();
+            if !trimed.is_empty() {
+                vec_lines.push(TextSpan::from(trimed));
             }
         }
 
@@ -155,22 +161,22 @@ impl TermailActivity {
             .with_texts(vec_lines)
             .build();
         self.view.update(COMPONENT_TEXTAREA_MAIL, props);
-        // update mail list
 
         if mail_item.new {
+            // update mail list
             self.current_maildir.move_new_to_cur(mail_item.item.id())?;
             mail_item.new = false;
             self.sync_maillist();
-        }
 
-        // update mail box tree view
-        let path = self.path.clone();
-        self.scan_dir(&path);
-        if let Some(props) = self.view.get_props(COMPONENT_TREEVIEW_MAILBOXES) {
-            let props = TreeViewPropsBuilder::from(props)
-                .with_tree_and_depth(self.tree.root(), 2)
-                .build();
-            self.view.update(COMPONENT_TREEVIEW_MAILBOXES, props);
+            // update mail box tree view
+            let path = self.path.clone();
+            self.scan_dir(&path);
+            if let Some(props) = self.view.get_props(COMPONENT_TREEVIEW_MAILBOXES) {
+                let props = TreeViewPropsBuilder::from(props)
+                    .with_tree_and_depth(self.tree.root(), 2)
+                    .build();
+                self.view.update(COMPONENT_TREEVIEW_MAILBOXES, props);
+            }
         }
 
         Ok(())

@@ -54,6 +54,7 @@ impl TermailActivity {
             }
         }
 
+        println!("{}", name);
         if new_items_total > 0 {
             name.push('(');
             name.push_str(&new_items_total.to_string());
