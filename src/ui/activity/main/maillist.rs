@@ -33,6 +33,7 @@ use chrono::prelude::DateTime;
 use chrono::Local;
 use maildir::Maildir;
 use mailparse::{MailHeaderMap, ParsedMail};
+use std::io::Write;
 use std::time::{Duration, UNIX_EPOCH};
 use tui_realm_stdlib::TablePropsBuilder;
 use tui_realm_stdlib::TextareaPropsBuilder;
@@ -137,11 +138,13 @@ impl TermailActivity {
         let content = Self::get_body_recursive(&parsed_mail)?;
         let mut vec_lines: Vec<TextSpan> = vec![];
         for line in content.split('\n') {
-            if !line.is_empty() {
+            if line.len() > 10 {
                 vec_lines.push(TextSpan::from(line));
             }
         }
 
+        let mut file = std::fs::File::create("data.txt").expect("create failed");
+        file.write_all(content.as_bytes()).expect("write failed");
         // update mail text area
         let props = self
             .view
