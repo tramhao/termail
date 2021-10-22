@@ -104,6 +104,11 @@ impl TermailActivity {
                 None
             }
 
+            (COMPONENT_TABLE_MAILLIST, key) if (key == &MSG_KEY_CHAR_H) => {
+                self.view.active(COMPONENT_TREEVIEW_MAILBOXES);
+                None
+            }
+
             (COMPONENT_TABLE_MAILLIST, key) if (key == &MSG_KEY_CHAR_L) => {
                 if let Some(Payload::One(Value::Usize(index))) =
                     self.view.get_state(COMPONENT_TABLE_MAILLIST)
