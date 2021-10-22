@@ -133,7 +133,6 @@ impl TermailActivity {
     }
 
     /// View gui
-    #[allow(clippy::too_many_lines)]
     pub(super) fn view(&mut self) {
         if let Some(mut ctx) = self.context.take() {
             let _drop = ctx.context.draw(|f| {

@@ -31,9 +31,8 @@ use super::{
 use anyhow::{anyhow, Result};
 use chrono::prelude::DateTime;
 use chrono::Local;
-use maildir::{MailEntry, Maildir};
+use maildir::Maildir;
 use mailparse::{MailHeaderMap, ParsedMail};
-use std::collections::VecDeque;
 use std::io::Write;
 use std::time::{Duration, UNIX_EPOCH};
 use tui_realm_stdlib::TablePropsBuilder;
@@ -45,24 +44,21 @@ use tuirealm::PropsBuilder;
 
 impl TermailActivity {
     pub fn load_mailbox(&mut self, node_id: &str) {
-        self.mail_items = VecDeque::new();
+        self.mail_items = Vec::new();
         let mail_dir = Maildir::from(node_id);
-        // let mut flag_chars = flags.chars().collect::<Vec<char>>();
         let mail_new_entries = mail_dir.list_new();
-        // sort by date
-        let mail_new_entries = mail_new_entries
-            .filter_map(std::result::Result::ok)
-            .collect::<Vec<MailEntry>>();
-        // mail_new_entries.sort_by_cached_key(|k| {
-        // item.date().unwrap_or(0);
-        // });
         // paths.sort_by_cached_key(|k| get_pin_yin(&k.file_name().to_string_lossy().to_string()));
 
         let mail_cur_entries = mail_dir.list_cur();
 
         // Add new items
         for record in mail_new_entries {
-            self.mail_items.push_back(MailEntryNewOrRead {
+            if record.is_err() {
+                continue;
+            }
+            let mut record = record.unwrap();
+            self.mail_items.push(MailEntryNewOrRead {
+                date: record.date().unwrap_or(0),
                 item: record,
                 new: true,
             });
@@ -73,12 +69,15 @@ impl TermailActivity {
             if record.is_err() {
                 continue;
             }
-            let record = record.unwrap();
-            self.mail_items.push_back(MailEntryNewOrRead {
+            let mut record = record.unwrap();
+            self.mail_items.push(MailEntryNewOrRead {
+                date: record.date().unwrap_or(0),
                 item: record,
                 new: false,
             });
         }
+        self.mail_items.sort_by(|b, a| a.date.cmp(&b.date));
+        self.mail_items.sort_by(|b, a| a.new.cmp(&b.new));
 
         self.current_maildir = mail_dir;
         self.sync_maillist();
@@ -92,9 +91,7 @@ impl TermailActivity {
                 table.add_row();
             }
 
-            // let id = record.id();
-            let date = record.item.date().unwrap_or(0);
-            // let received = record.received().unwrap_or(0);
+            let date = record.date;
             let header = record.item.headers().unwrap();
             let sender = header
                 .get_first_value("From")
@@ -103,8 +100,13 @@ impl TermailActivity {
                 .get_first_value("Subject")
                 .unwrap_or_else(|| "No Subject".to_string());
             // Creates a new SystemTime from the specified number of whole seconds
-            #[allow(clippy::cast_sign_loss)]
-            let d = UNIX_EPOCH + Duration::from_secs(date as u64);
+            let date_u64 = if date.is_negative() {
+                0
+            } else {
+                date.unsigned_abs()
+            };
+            // let result = if a > b { a } else { b };
+            let d = UNIX_EPOCH + Duration::from_secs(date_u64);
             // Create DateTime from SystemTime
             let datetime = DateTime::<Local>::from(d);
             // Formats the combined date and time with the specified format string.

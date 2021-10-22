@@ -35,7 +35,6 @@ use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
 use log::error;
 use maildir::MailEntry;
 use maildir::Maildir;
-use std::collections::VecDeque;
 use std::path::{Path, PathBuf};
 use tui_realm_treeview::Tree;
 use tuirealm::View;
@@ -57,6 +56,7 @@ const COMPONENT_TEXT_MESSAGE: &str = "TEXT_MESSAGE";
 struct MailEntryNewOrRead {
     item: MailEntry,
     new: bool,
+    date: i64,
 }
 pub struct TermailActivity {
     exit_reason: Option<ExitReason>,
@@ -66,7 +66,7 @@ pub struct TermailActivity {
     path: PathBuf,
     tree: Tree,
     config: TermailConfig,
-    mail_items: VecDeque<MailEntryNewOrRead>,
+    mail_items: Vec<MailEntryNewOrRead>,
     current_maildir: Maildir,
 }
 impl Default for TermailActivity {
@@ -82,7 +82,7 @@ impl Default for TermailActivity {
             path: p.to_path_buf(),
             tree: Tree::new(Self::dir_tree(p, 2)),
             config,
-            mail_items: VecDeque::new(),
+            mail_items: Vec::new(),
             current_maildir: Maildir::from(p.to_path_buf()),
         }
     }
