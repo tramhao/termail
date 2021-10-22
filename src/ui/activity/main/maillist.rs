@@ -47,8 +47,6 @@ impl TermailActivity {
         self.mail_items = Vec::new();
         let mail_dir = Maildir::from(node_id);
         let mail_new_entries = mail_dir.list_new();
-        // paths.sort_by_cached_key(|k| get_pin_yin(&k.file_name().to_string_lossy().to_string()));
-
         let mail_cur_entries = mail_dir.list_cur();
 
         // Add new items
