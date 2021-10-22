@@ -50,7 +50,7 @@ impl TermailActivity {
         // let mut flag_chars = flags.chars().collect::<Vec<char>>();
         let mail_new_entries = mail_dir.list_new();
         // sort by date
-        let mut mail_new_entries = mail_new_entries
+        let mail_new_entries = mail_new_entries
             .filter_map(std::result::Result::ok)
             .collect::<Vec<MailEntry>>();
         // mail_new_entries.sort_by_cached_key(|k| {
