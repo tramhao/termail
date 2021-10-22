@@ -152,7 +152,8 @@ impl TermailActivity {
         }
 
         let mut file = std::fs::File::create("data.txt").expect("create failed");
-        file.write_all(content.as_bytes()).expect("write failed");
+        file.write_all(&parsed_mail.get_body_raw().unwrap())
+            .expect("write failed");
         // update mail text area
         let props = self
             .view
