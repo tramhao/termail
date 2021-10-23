@@ -175,4 +175,10 @@ impl TermailActivity {
             &_ => {}
         }
     }
+    pub fn update_maillist(&mut self) {
+        if let Ok(mail_items) = self.receiver_mail_items.try_recv() {
+            self.mail_items = mail_items;
+            self.sync_maillist();
+        }
+    }
 }

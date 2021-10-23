@@ -33,7 +33,8 @@ use chrono::prelude::DateTime;
 use chrono::Local;
 use maildir::Maildir;
 use mailparse::{MailHeaderMap, ParsedMail};
-use std::io::Write;
+// use std::io::Write;
+use std::thread;
 use std::time::{Duration, UNIX_EPOCH};
 use tui_realm_stdlib::TablePropsBuilder;
 use tui_realm_stdlib::TextareaPropsBuilder;
@@ -44,41 +45,44 @@ use tuirealm::PropsBuilder;
 
 impl TermailActivity {
     pub fn load_mailbox(&mut self, node_id: &str) {
-        self.mail_items = Vec::new();
         let mail_dir = Maildir::from(node_id);
-        let mail_new_entries = mail_dir.list_new();
-        let mail_cur_entries = mail_dir.list_cur();
-
-        // Add new items
-        for record in mail_new_entries {
-            if record.is_err() {
-                continue;
-            }
-            let mut record = record.unwrap();
-            self.mail_items.push(MailEntryNewOrRead {
-                date: record.date().unwrap_or(0),
-                item: record,
-                new: true,
-            });
-        }
-
-        // Add read items
-        for record in mail_cur_entries {
-            if record.is_err() {
-                continue;
-            }
-            let mut record = record.unwrap();
-            self.mail_items.push(MailEntryNewOrRead {
-                date: record.date().unwrap_or(0),
-                item: record,
-                new: false,
-            });
-        }
-        self.mail_items.sort_by(|b, a| a.date.cmp(&b.date));
-        self.mail_items.sort_by(|b, a| a.new.cmp(&b.new));
-
         self.current_maildir = mail_dir;
-        self.sync_maillist();
+        let mail_dir = Maildir::from(node_id);
+        let mut mail_items = Vec::new();
+        let tx = self.sender_mail_items.clone();
+        thread::spawn(move || {
+            let mail_new_entries = mail_dir.list_new();
+            let mail_cur_entries = mail_dir.list_cur();
+
+            // Add new items
+            for record in mail_new_entries {
+                if record.is_err() {
+                    continue;
+                }
+                let mut record = record.unwrap();
+                mail_items.push(MailEntryNewOrRead {
+                    date: record.date().unwrap_or(0),
+                    item: record,
+                    new: true,
+                });
+            }
+
+            // Add read items
+            for record in mail_cur_entries {
+                if record.is_err() {
+                    continue;
+                }
+                let mut record = record.unwrap();
+                mail_items.push(MailEntryNewOrRead {
+                    date: record.date().unwrap_or(0),
+                    item: record,
+                    new: false,
+                });
+            }
+            mail_items.sort_by(|b, a| a.date.cmp(&b.date));
+            mail_items.sort_by(|b, a| a.new.cmp(&b.new));
+            tx.send(mail_items).ok();
+        });
     }
 
     pub fn sync_maillist(&mut self) {
@@ -149,9 +153,9 @@ impl TermailActivity {
             }
         }
 
-        let mut file = std::fs::File::create("data.txt").expect("create failed");
-        file.write_all(&parsed_mail.get_body_raw().unwrap())
-            .expect("write failed");
+        // let mut file = std::fs::File::create("data.txt").expect("create failed");
+        // file.write_all(&parsed_mail.get_body_raw().unwrap())
+        // .expect("write failed");
         // update mail text area
         let props = self
             .view

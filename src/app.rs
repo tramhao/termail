@@ -63,6 +63,7 @@ impl App {
         main_activity.init_config(&self.config);
         main_activity.on_create(ctx);
         loop {
+            main_activity.update_maillist();
             // Draw activity
             main_activity.on_draw();
             // Check if activity has terminated

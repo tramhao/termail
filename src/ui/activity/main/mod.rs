@@ -36,6 +36,7 @@ use log::error;
 use maildir::MailEntry;
 use maildir::Maildir;
 use std::path::{Path, PathBuf};
+use std::sync::mpsc::{self, Receiver, Sender};
 use tui_realm_treeview::Tree;
 use tuirealm::View;
 
@@ -68,12 +69,15 @@ pub struct TermailActivity {
     config: TermailConfig,
     mail_items: Vec<MailEntryNewOrRead>,
     current_maildir: Maildir,
+    receiver_mail_items: Receiver<Vec<MailEntryNewOrRead>>,
+    sender_mail_items: Sender<Vec<MailEntryNewOrRead>>,
 }
 impl Default for TermailActivity {
     fn default() -> Self {
         let full_path = shellexpand::tilde(MAIL_DIR);
         let p: &Path = Path::new(full_path.as_ref());
         let config = TermailConfig::default();
+        let (tx, rx) = mpsc::channel();
         Self {
             exit_reason: None,
             context: None,
@@ -84,6 +88,8 @@ impl Default for TermailActivity {
             config,
             mail_items: Vec::new(),
             current_maildir: Maildir::from(p.to_path_buf()),
+            sender_mail_items: tx,
+            receiver_mail_items: rx,
         }
     }
 }
