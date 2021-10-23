@@ -179,6 +179,7 @@ impl TermailActivity {
         if let Ok(mail_items) = self.receiver_mail_items.try_recv() {
             self.mail_items = mail_items;
             self.sync_maillist();
+            self.redraw = true;
         }
     }
 }
